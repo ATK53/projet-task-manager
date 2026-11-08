@@ -1,0 +1,96 @@
+/* Les couleurs sont dans des variables pour les changer facilement */
+:root {
+  --ink: #1f2a44;
+  --page: #eef2f7;
+  --card: #ffffff;
+  --line: #d5dce8;
+  --highlight: #ffe45c;  /* la couleur « surligneur » du bouton principal */
+  --late: #c0392b;
+  --ok: #2e7d5b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.5;
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+h1 { font-size: 2rem; margin-bottom: 1.5rem; }
+
+/* Formulaire d'ajout de tâche */
+.add-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.add-form input[name="title"] { grid-column: 1 / -1; }
+
+input {
+  padding: 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+  background: var(--card);
+}
+input:focus, button:focus-visible { outline: 3px solid var(--ink); outline-offset: 1px; }
+
+button {
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  background: var(--highlight);
+  color: var(--ink);
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover { background: #ffd800; }
+
+/* Liste des tâches */
+.task-list { list-style: none; margin: 0; padding: 0; }
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.6rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--ink);
+  border-radius: 4px;
+}
+.task.overdue { border-left-color: var(--late); }
+.task.overdue .task-meta { color: var(--late); font-weight: bold; }
+.task.done { border-left-color: var(--ok); opacity: 0.65; }
+.task.done .task-title { text-decoration: line-through; }
+
+.task-title { display: block; font-size: 1.1rem; }
+.task-meta { font-size: 0.9rem; color: #5b6784; }
+
+.task-actions { display: flex; gap: 0.4rem; }
+.task-actions form { margin: 0; }
+
+button.small { padding: 0.3rem 0.7rem; font-size: 0.85rem; background: var(--card); }
+button.small:hover { background: var(--page); }
+button.danger { color: var(--late); border-color: var(--late); }
+
+.empty { color: #5b6784; font-style: italic; }
+
+/* Éléments empilés sur petits écrans */
+@media (max-width: 480px) {
+  .add-form { grid-template-columns: 1fr; }
+  .task { flex-direction: column; align-items: flex-start; }
+}

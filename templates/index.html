@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestionnaire de tâches étudiant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <h1>Mes devoirs</h1>
+
+    <form class="add-form" action="{{ url_for('add') }}" method="post">
+      <input type="text" name="title" placeholder="Que dois-tu faire ?" required>
+      <input type="text" name="course" placeholder="Matière (ex. Biologie L1)">
+      <input type="date" name="due">
+      <button type="submit">Ajouter la tâche</button>
+    </form>
+
+    {% if tasks %}
+    <ul class="task-list">
+      {% for task in tasks %}
+      <li class="task {% if task.done %}done{% elif task.due and task.due < today %}overdue{% endif %}">
+        <div class="task-info">
+          <span class="task-title">{{ task.title }}</span>
+          <span class="task-meta">
+            {% if task.course %}{{ task.course }}{% endif %}
+            {% if task.due %}
+              {% if task.course %} | {% endif %}
+              {% if task.done %}Était à rendre le {{ task.due | date_fr }}
+              {% elif task.due < today %}En retard depuis le {{ task.due | date_fr }}
+              {% elif task.due == today %}À rendre aujourd’hui
+              {% else %}À rendre le {{ task.due | date_fr }}{% endif %}
+            {% endif %}
+          </span>
+        </div>
+        <div class="task-actions">
+          <form action="{{ url_for('toggle', task_id=task.id) }}" method="post">
+            <button type="submit" class="small">{{ 'Annuler' if task.done else 'Terminé' }}</button>
+          </form>
+          <form action="{{ url_for('delete', task_id=task.id) }}" method="post">
+            <button type="submit" class="small danger">Supprimer</button>
+          </form>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">Aucune tâche pour l’instant. Ajoute ton premier devoir ci-dessus.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
